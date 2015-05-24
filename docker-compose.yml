@@ -1,0 +1,37 @@
+# mysql
+mysql:
+  image: khiraiwa/docker-mysql
+  volumes:
+    - /data_mysql:/data_mysql
+  ports:
+    - "3306:3306"
+  
+# apache2
+apache2:
+  image: khiraiwa/docker-apache2
+  volumes:
+    - /data_apache2:/data_apache2
+    - /data_apache2/log/apache2:/data_apache2/log/apache2
+  ports:
+    - "443:443"
+    - "1111:1111"
+  links:
+    - mysql:docker-mysql
+
+# subsonic
+subsonic:
+  image: khiraiwa/docker-subsonic
+  volumes:
+    - /data_subsonic:/data_subsonic
+  ports:
+    - "4040:4040"
+
+# nginx
+nginx:
+  image: khiraiwa/docker-nginx
+  volumes:
+    - /data_nginx:/data_nginx
+  ports:
+    - "80:80"
+  links:
+    - apache2:docker-apache2
